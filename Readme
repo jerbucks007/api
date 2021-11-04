@@ -1,0 +1,115 @@
+
+README
+
+HOW TO RUN
+1.) for running the application type "npm run dev"
+2.) for running teh test type "npm run test"
+
+
+-------------------------------------------------------------------------------------------------
+file structure of project
+------------------------------------------------------------------------------------------------
+
+spec - unit test
+src
+    configs - contains env configuration
+    loaders - contains code that need to run at the beginning
+    models - contains database model
+    resources
+        functions - contains any helper functions
+        schemas - conatains schemas
+    routes
+        controllers - contains endpoint
+        middlewares - contains middleware
+    services - contains services 
+
+------------------------------------------------------------------------------------------------
+middleware sample code
+------------------------------------------------------------------------------------------------
+
+    const schemaUser = require("../../resources/schemas/schema-user");
+
+    module.exports = async (req, res, next) => {
+        const validation = await schemaUser(req.body);
+        if(validation.errors.length > 0)
+            return res.status(500).send('Invalid format in Body');
+        next();
+    }
+
+------------------------------------------------------------------------------------------------
+controller sample code
+------------------------------------------------------------------------------------------------
+
+    const serviceUser = require("../../services/service-user");
+
+    const fn = {};
+
+    fn.get = async (req, res) => {
+        const { _id } = req.params;
+        const user = await serviceUser.getUser(_id);
+        if(user) return res.send(user);
+        return res.status(404).send("User Doesn't Exist");
+    }
+
+    module.exports = fn;
+
+------------------------------------------------------------------------------------------------
+model sample code
+------------------------------------------------------------------------------------------------
+
+    module.exports = (mongoose, connection) => {
+
+    const schema = new mongoose.Schema({
+        name: { type: String },
+        address: { type: String },
+        contactnumber: { type: Number },
+        isActive: { type: Boolean }
+    }, { timestamps: true, minimize: false });
+
+    const model = connection.model('users', schema);
+    return model;
+    
+    };
+
+------------------------------------------------------------------------------------------------
+services sample code
+------------------------------------------------------------------------------------------------
+
+    const models = require('../models');
+
+    const service = {};
+
+    service.saveUser = async (body) => {
+        const newUser = models.main.users({ ...body, isActive: true });
+        const new_user = await newUser.save();
+        return new_user;
+    }
+
+    module.exports = service
+
+------------------------------------------------------------------------------------------------
+tests sample code
+------------------------------------------------------------------------------------------------
+
+    const request = require('supertest');
+    const assert = require('assert');
+
+    const userSchema = require('../src/resources/schemas/schema-user');
+    const testData = require('../spec/test.data');
+
+    const app = require('../app');
+
+    describe('GET /user && GET /users', function () {
+
+        it('should return 200 if _id is found', function (done) {
+            request(app)
+                .get(`/user/${testData._id}`)
+                .expect(200)
+                .end( async (err, res) => {
+                    const validation = await userSchema(res.body);
+                    assert.equal(validation.errors.length, 0)
+                    done();
+                })
+        });
+
+    });

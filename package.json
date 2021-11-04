@@ -1,0 +1,38 @@
+{
+  "name": "sampleCode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "SET NODE_ENV=development&& jasmine",
+    "dev": "SET NODE_ENV=development&& nodemon app.js",
+    "staging": "SET NODE_ENV=staging&& node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "jasmine": "^3.10.0",
+    "jsonschema": "^1.4.0",
+    "mongoose": "^6.0.12",
+    "supertest": "^6.1.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "@babel/preset-stage-2": "^7.0.0",
+    "@babel/register": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "babel-loader": "^8.0.6",
+    "nodemon": "^2.0.12"
+  }
+}
